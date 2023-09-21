@@ -1,9 +1,9 @@
 import asyncio
+from subprocess import getoutput
+
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from websockets.exceptions import ConnectionClosedOK
-
-import random
 
 app = FastAPI()
 
@@ -11,7 +11,9 @@ app = FastAPI()
 async def get_temperature() -> float:
     """get temperature from device"""
     # debug: generate random temparature value
-    return random.randint(0, 100)
+    raw_text = getoutput("vcgencmd measure_temp")
+    float_text = raw_text.removeprefix("temp=").removesuffix("'C")
+    return float(float_text)
 
 
 @app.websocket("/ws")
