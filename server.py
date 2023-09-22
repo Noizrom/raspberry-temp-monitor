@@ -7,7 +7,7 @@ import random  # debug
 from enum import Enum
 from subprocess import getoutput
 import sys
-from typing import AsyncGenerator, Callable, Optional
+from typing import AsyncGenerator, Callable, Optional, TypeVar
 
 import paramiko
 from fastapi import FastAPI, WebSocket
@@ -29,6 +29,14 @@ if not DEV:
             {"sink": sys.stdout, "level": "WARNING"},
         ]
     )
+
+# if anext is not defined in global scope
+if not "anext" in globals():
+    logger.warning("anext is not defined in global scope. defining...")
+    T = TypeVar("T")
+
+    async def anext(ait: AsyncGenerator[T, None]) -> T:
+        return await ait.__anext__()
 
 
 class Devices(Enum):
