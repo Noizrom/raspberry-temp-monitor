@@ -8,6 +8,7 @@ fastapi = "*"
 websocket = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 paramiko = "*"
+loguru = "*"
 
 [dev-packages]
 

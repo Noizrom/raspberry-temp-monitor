@@ -3,7 +3,7 @@
   import { cubicOut, quadOut } from "svelte/easing";
   import { tweened } from "svelte/motion";
   import { connect_websocket, type DataResponse } from "../lib/api";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   export let source: string;
 
@@ -18,14 +18,29 @@
     sutle_text = "disconnected";
   };
 
-  const onUpdate = (response: DataResponse) => {
-    const _temp = response.data;
-    // console.log(_temp);
-    temp = _temp.toFixed(2).padStart(5, "0");
+  const onUpdate = (temperature: number) => {
+    sutle_text = "connected";
+    temp = temperature.toFixed(2).padStart(5, "0");
   };
 
+  const onError = (error: string) => {
+    sutle_text = error;
+  };
+
+  let destroyer: (() => void) | null = null;
+
   onMount(() => {
-    connect_websocket(source, onUpdate, onConnect, onDisconnect);
+    destroyer = connect_websocket(
+      source,
+      onUpdate,
+      onConnect,
+      onDisconnect,
+      onError
+    );
+  });
+
+  onDestroy(() => {
+    destroyer && destroyer();
   });
 
   function flipDown(node: HTMLElement, { delay = 0 }) {
