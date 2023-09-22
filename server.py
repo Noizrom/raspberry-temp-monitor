@@ -19,7 +19,7 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
 app = FastAPI()
 
-DEV = True
+DEV = False
 INTERVAL = 1.5
 
 logger.info(f"SERVER RUNNING IN {'DEV' if DEV else 'PROD'} MODE")
