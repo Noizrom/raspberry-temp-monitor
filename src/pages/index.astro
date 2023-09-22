@@ -11,7 +11,11 @@ import Text from "../components/text.svelte";
     <title>Raspberry Monitor</title>
   </head>
   <body>
-    <Text client:only />
+    <!-- Just add another source here that corresponds to the server.py -->
+    <div class="flex flex-col gap-16">
+      <Text client:only source="/raspberry1" />
+      <Text client:only source="/raspberry2" />
+    </div>
   </body>
 </html>
 
