@@ -9,7 +9,7 @@ from enum import Enum
 
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
-from websockets.exceptions import ConnectionClosedOK
+from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 import paramiko
 
 
@@ -116,7 +116,7 @@ class Broadcaster:
             for subscriber in self.subscribers.get(Devices.RASPBERRY1, []):
                 try:
                     await subscriber.send_json({"data": new_data})
-                except ConnectionClosedOK:
+                except (ConnectionClosedOK, ConnectionClosedError):
                     print("A subscriber is disconnected. removing.. .")
                     for sub in self.subscribers[Devices.RASPBERRY1]:
                         if sub == subscriber:
@@ -139,7 +139,7 @@ class Broadcaster:
             for subscriber in self.subscribers.get(Devices.RASPBERRY2, []):
                 try:
                     await subscriber.send_json({"data": new_data})
-                except ConnectionClosedOK:
+                except (ConnectionClosedOK, ConnectionClosedError):
                     print("A subscriber is disconnected. removing.. .")
                     for sub in self.subscribers[Devices.RASPBERRY2]:
                         if sub == subscriber:
