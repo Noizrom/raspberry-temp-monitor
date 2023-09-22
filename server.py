@@ -5,7 +5,7 @@ import os
 import random  # debug
 import asyncio
 from subprocess import getoutput
-from enum import StrEnum
+from enum import Enum
 
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +20,7 @@ DEV = False
 INTERVAL = 1.5
 
 
-class Devices(StrEnum):
+class Devices(Enum):
     """devices"""
 
     RASPBERRY1 = "raspberry1"
